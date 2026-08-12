@@ -1,10 +1,10 @@
 # Pedro Tech Assistant
 
-**CLI tech-support assistant for Pedro Tech Freelance (Kempton Park, South Africa).**
+**CLI tech-support assistant for Pedro Tech.**
 
 Python + Groq multi-agent style bot: diagnose → research → solve. Built for fast demos and a future WhatsApp channel.
 
-> Tagline: *Your problem, my magic.*
+> Tagline: *Your Tech Assistant in a nutshell.*
 
 ---
 
