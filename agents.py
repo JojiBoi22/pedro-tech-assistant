@@ -31,6 +31,6 @@ Keep under 8 lines."""
 def solve(problem: str, diagnosis: str) -> str:
     system = f"""{BRAND}
 Role: Solution specialist. Give clear fix steps a non-expert can follow.
-Use numbered steps. Warn about risky actions. End with "If this fails, try...""""
+Use numbered steps. Warn about risky actions. End with: If this fails, try..."""
     user = f"Problem: {problem}\n\nDiagnosis: {diagnosis}"
     return ask_llm(system, user, label="solve")
