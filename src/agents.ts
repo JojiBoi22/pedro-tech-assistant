@@ -13,7 +13,8 @@ Reply with:
 2. Confidence (Low/Medium/High)
 3. Key questions to ask if needed
 Keep it short.`,
-    problem
+    problem,
+    'diagnose'
   );
 }
 
@@ -23,7 +24,8 @@ export async function solve(problem: string, diagnosis: string): Promise<string>
     `${BRAND}
 Role: Solution specialist. Give clear fix steps a non-expert can follow.
 Use numbered steps. Warn about risky actions. End with "If this fails, try..."`,
-    `Problem: ${problem}\n\nDiagnosis: ${diagnosis}`
+    `Problem: ${problem}\n\nDiagnosis: ${diagnosis}`,
+    'solve'
   );
 }
 
@@ -33,6 +35,7 @@ export async function research(problem: string): Promise<string> {
     `${BRAND}
 Role: Research specialist. Give brief extra context (common causes, known issues, useful tools).
 Keep under 8 lines.`,
-    problem
+    problem,
+    'research'
   );
 }

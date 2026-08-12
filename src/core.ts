@@ -10,16 +10,19 @@ export interface AssistantResult {
 
 /**
  * Shared core for CLI, WhatsApp, and future web UI.
- * Demo pipeline: diagnose + research in parallel, then solve.
+ * Pipeline: diagnose then research then solve (sequential to avoid
+ * thrashing a single local Ollama instance under low RAM).
  */
 export async function handleMessage(userText: string): Promise<AssistantResult> {
   const start = Date.now();
 
-  const [diagnosis, researchNotes] = await Promise.all([
-    diagnose(userText),
-    research(userText),
-  ]);
+  process.stderr.write('[core] step 1/3 diagnose...\n');
+  const diagnosis = await diagnose(userText);
 
+  process.stderr.write('[core] step 2/3 research...\n');
+  const researchNotes = await research(userText);
+
+  process.stderr.write('[core] step 3/3 solve...\n');
   const solution = await solve(userText, diagnosis);
 
   const finalAnswer = [
