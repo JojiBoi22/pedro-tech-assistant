@@ -2,7 +2,7 @@
 
 **CLI tech-support assistant for Pedro Tech Freelance (Kempton Park, South Africa).**
 
-A demo multi-agent style bot that diagnoses tech problems, proposes practical fixes, and adds short research notes — designed to run locally with open models (Ollama) and later expand to WhatsApp for real client support.
+Python + Groq multi-agent style bot: diagnose → research → solve. Built for fast demos and a future WhatsApp channel.
 
 > Tagline: *Your problem, my magic.*
 
@@ -10,35 +10,10 @@ A demo multi-agent style bot that diagnoses tech problems, proposes practical fi
 
 ## Purpose
 
-Pedro Tech Assistant is built to:
-
-1. **Help non-experts** with everyday PC, laptop, network, and software issues
-2. **Benchmark** open-source LLM responses for tech support quality
-3. **Demo** a multi-agent style pipeline (Diagnose → Solve → Research) before full integration with [Multi-agent-framework](https://github.com/JojiBoi22/Multi-agent-framework) and [hive-framework](https://github.com/JojiBoi22/hive-framework)
-4. **Grow into WhatsApp** so clients (and testers like family / partners) can message the same core logic
-
-This repository is the **product layer**. The long-term engine is the author's multi-agent and hive frameworks.
-
----
-
-## How it works (demo pipeline)
-
-```
-User message (CLI)
-        ↓
-handleMessage()
-        ↓
-┌─────────────────────────────┐
-│  Diagnostic Worker          │  ← most likely cause + confidence
-│  Research Worker (parallel) │  ← brief extra context
-└─────────────────────────────┘
-        ↓
-  Solution Worker             ← numbered fix steps
-        ↓
-  Final formatted answer + timing
-```
-
-The same `handleMessage()` function is intended to power CLI, WhatsApp, and a future web UI.
+1. Help non-experts with PC, laptop, network, and software issues
+2. Benchmark fast cloud open models (Groq) for tech support quality
+3. Demo a multi-agent style pipeline before deeper framework integration
+4. Share one `handle_message()` core across CLI and WhatsApp
 
 ---
 
@@ -46,58 +21,27 @@ The same `handleMessage()` function is intended to power CLI, WhatsApp, and a fu
 
 | Layer | Choice |
 |--------|--------|
-| Language | TypeScript (ESM) |
-| Runtime | Node.js + `tsx` |
-| LLM | Ollama (local) or any OpenAI-compatible API (e.g. Groq) |
-| Future engine | Multi-agent-framework + hive-framework |
+| Language | Python 3.10+ |
+| LLM | Groq API (`qwen/qwen3.6-27b` default) |
+| Channels | CLI now · WhatsApp next |
 | Brand | Pedro Tech Freelance — Kempton Park, SA |
 
 ---
 
 ## Quick start
 
-### 1. Prerequisites
-
-- Node.js 18+
-- [Ollama](https://ollama.com) with a model pulled (e.g. `llama3.1:8b`), **or** a Groq/OpenAI-compatible API key
-
-```bash
-# Example: local model
-ollama pull llama3.1:8b
-```
-
-### 2. Install
-
 ```bash
 git clone https://github.com/JojiBoi22/pedro-tech-assistant.git
 cd pedro-tech-assistant
-npm install
-```
 
-### 3. Configure
+python -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 
-```bash
 cp .env.example .env
-```
+# edit .env and paste GROQ_API_KEY from https://console.groq.com
 
-Edit `.env`:
-
-```env
-# Local Ollama (default)
-LLM_API_KEY=ollama
-LLM_BASE_URL=http://127.0.0.1:11434/v1
-LLM_MODEL=llama3.1:8b
-
-# Or Groq free tier:
-# LLM_API_KEY=gsk_...
-# LLM_BASE_URL=https://api.groq.com/openai/v1
-# LLM_MODEL=llama-3.3-70b-versatile
-```
-
-### 4. Run
-
-```bash
-npm run dev
+python cli.py
 ```
 
 Example prompts:
@@ -114,36 +58,47 @@ Type `exit` to quit.
 
 ```
 pedro-tech-assistant/
-├── src/
-│   ├── llm.ts      # OpenAI-compatible LLM client (Ollama / Groq / etc.)
-│   ├── agents.ts   # Diagnose / Solve / Research roles
-│   ├── core.ts     # handleMessage() — shared core for CLI + future WhatsApp
-│   └── cli.ts      # Interactive CLI demo
-├── AGENTS.md       # Agent roles, pipeline, and evolution notes
+├── llm.py              # Groq client
+├── agents.py           # diagnose / research / solve roles
+├── core.py             # handle_message() — shared core
+├── cli.py              # Interactive CLI
+├── requirements.txt
 ├── .env.example
-├── package.json
+├── AGENTS.md
 └── README.md
+```
+
+---
+
+## How it works
+
+```
+User (CLI / future WhatsApp)
+        ↓
+handle_message()
+        ↓
+  diagnose → research → solve
+        ↓
+  Formatted answer + timing
 ```
 
 ---
 
 ## Roadmap
 
-- [x] CLI demo with diagnose → solve → research pipeline
-- [x] Local open models via Ollama
-- [ ] Wire real Supervisor + Workers from Multi-agent-framework
-- [ ] Apply hive-framework hierarchical orchestration
-- [ ] WhatsApp channel (same `handleMessage` core)
-- [ ] Persistent memory / session context
+- [x] Python CLI with Groq
+- [x] diagnose → research → solve pipeline
+- [ ] WhatsApp channel (same `handle_message`)
+- [ ] Wire Multi-agent-framework / hive-framework ideas
+- [ ] Session memory
 - [ ] Web UI
-- [ ] Benchmark suite for model quality
 
 ---
 
 ## Related projects
 
-- [Multi-agent-framework](https://github.com/JojiBoi22/Multi-agent-framework) — TypeScript multi-agent engine
-- [hive-framework](https://github.com/JojiBoi22/hive-framework) — hierarchical multi-agent orchestration
+- [Multi-agent-framework](https://github.com/JojiBoi22/Multi-agent-framework)
+- [hive-framework](https://github.com/JojiBoi22/hive-framework)
 
 ---
 
@@ -151,8 +106,6 @@ pedro-tech-assistant/
 
 **Pedro Tech Freelance** · Kempton Park, South Africa  
 Built by [JojiBoi22](https://github.com/JojiBoi22)
-
----
 
 ## License
 
